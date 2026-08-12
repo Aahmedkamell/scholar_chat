@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scholar_chat/constants.dart';
-import 'package:scholar_chat/pages/login_page.dart';
+import 'package:scholar_chat/pages/chat_page.dart';
 import 'package:scholar_chat/widgets/custom_button.dart';
 import 'package:scholar_chat/widgets/custom_text_field.dart';
 import '../../helper/show_snackbar.dart';
@@ -87,19 +87,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         isLoading = true;
                         setState(() {});
                         await registerUser();
+                        Navigator.pushNamed(context,ChatPage.id);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           showSnackBar(context, 'weak password');
                         } else if (e.code == 'email-already-in-use') {
                           showSnackBar(context, 'email already exists');
                         }
-                             showSnackBar(context, 'success');
                       } catch (e) {
                         showSnackBar(context, 'There was an error');
                         isLoading = false;
                         setState(() {});
                       }
-                 
                     }
                   },
                   text: 'Register',

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scholar_chat/constants.dart';
 import 'package:scholar_chat/helper/show_snackbar.dart';
+import 'package:scholar_chat/pages/chat_page.dart';
 import 'package:scholar_chat/pages/register_page.dart';
 import 'package:scholar_chat/widgets/custom_button.dart';
 import 'package:scholar_chat/widgets/custom_text_field.dart';
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                         setState(() {});
                         await loginUser();
 
-                        showSnackBar(context, 'success');
+                        Navigator.pushNamed(context,ChatPage.id);
                      } on FirebaseAuthException catch (e) {
   switch (e.code) {
     case 'user-not-found':
