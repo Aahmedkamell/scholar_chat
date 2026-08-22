@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scholar_chat/constants.dart';
+import 'package:scholar_chat/models/message.dart';
 import 'package:scholar_chat/widgets/chat_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,13 +13,16 @@ class ChatPage extends StatelessWidget {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-      future: messages.get(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: messages.orderBy(kCreatedAt).snapshots(),
 
       builder: (context, snapshot) {
-        
         if (snapshot.hasData) {
-          print(snapshot.data!.docs[0]['messages']);
+          List<Message> messagesList = [];
+          for (int i = 0; i < snapshot.data!.docs.length; i++) {
+            messagesList.add(Message.fromJson(snapshot.data!.docs[i]));
+          }
+
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
@@ -36,8 +40,9 @@ class ChatPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    itemCount: messagesList.length,
                     itemBuilder: (context, index) {
-                      return ChatBubble();
+                      return ChatBubble(message: messagesList[index]);
                     },
                   ),
                 ),
@@ -46,7 +51,10 @@ class ChatPage extends StatelessWidget {
                   child: TextField(
                     controller: controller,
                     onSubmitted: (data) {
-                      messages.add({'message': data});
+                      messages.add({
+                        kMessage: data,
+                        kCreatedAt: DateTime.now(),
+                      });
                       controller.clear();
                     },
                     decoration: InputDecoration(

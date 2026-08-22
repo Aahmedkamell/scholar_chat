@@ -2,6 +2,7 @@
     "cmake.ignoreCMakeListsMissing": true,
     "conventionalCommits.scopes": [
         "login page",
-        "constant.dart"
+        "constant.dart",
+        "chat page"
     ]
 }
