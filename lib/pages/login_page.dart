@@ -73,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
 
                 CustomTextFormField(
+                  obsecureText: true,
                   onChanged: (data) {
                     password = data;
                   },
@@ -88,43 +89,62 @@ class _LoginPageState extends State<LoginPage> {
                         setState(() {});
                         await loginUser();
 
-                        Navigator.pushNamed(context,ChatPage.id, arguments: email);
-                     } on FirebaseAuthException catch (e) {
-  switch (e.code) {
-    case 'user-not-found':
-      showSnackBar(context, 'No user found for this email.');
-      break;
+                        Navigator.pushNamed(
+                          context,
+                          ChatPage.id,
+                          arguments: email,
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        switch (e.code) {
+                          case 'user-not-found':
+                            showSnackBar(
+                              context,
+                              'No user found for this email.',
+                            );
+                            break;
 
-    case 'wrong-password':
-      showSnackBar(context, 'Wrong password.');
-      break;
+                          case 'wrong-password':
+                            showSnackBar(context, 'Wrong password.');
+                            break;
 
-    case 'invalid-email':
-      showSnackBar(context, 'The email address is not valid.');
-      break;
+                          case 'invalid-email':
+                            showSnackBar(
+                              context,
+                              'The email address is not valid.',
+                            );
+                            break;
 
-    case 'user-disabled':
-      showSnackBar(context, 'This user account has been disabled.');
-      break;
+                          case 'user-disabled':
+                            showSnackBar(
+                              context,
+                              'This user account has been disabled.',
+                            );
+                            break;
 
-    case 'invalid-credential':
-      showSnackBar(context, 'The email or password is incorrect.');
-      break;
+                          case 'invalid-credential':
+                            showSnackBar(
+                              context,
+                              'The email or password is incorrect.',
+                            );
+                            break;
 
-    case 'too-many-requests':
-      showSnackBar(
-        context,
-        'Too many attempts. Please try again later.',
-      );
-      break;
+                          case 'too-many-requests':
+                            showSnackBar(
+                              context,
+                              'Too many attempts. Please try again later.',
+                            );
+                            break;
 
-    default:
-      showSnackBar(context, 'Login failed. Please try again.');
-  }
-} finally {
-  isLoading = false;
-  setState(() {});
-}
+                          default:
+                            showSnackBar(
+                              context,
+                              'Login failed. Please try again.',
+                            );
+                        }
+                      } finally {
+                        isLoading = false;
+                        setState(() {});
+                      }
                     }
                   },
                   text: 'Log IN',
