@@ -47,7 +47,9 @@ class ChatPage extends StatelessWidget {
                     controller: _scrollController,
                     itemCount: messagesList.length,
                     itemBuilder: (context, index) {
-                      return ChatBubble(message: messagesList[index]);
+                      return messagesList[index].id==email? ChatBubble(message: messagesList[index])
+                      :ChatBubbleForFriend(message: messagesList[index])
+                      ;
                     },
                   ),
                 ),
