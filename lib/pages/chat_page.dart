@@ -7,10 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatPage extends StatelessWidget {
   static String id = 'ChatPage';
 
+  final _scrollController = ScrollController();
+
   CollectionReference messages = FirebaseFirestore.instance.collection(
     kMessagesCollections,
   );
-  TextEditingController controller = TextEditingController();
+  TextEditingController  _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -40,6 +42,7 @@ class ChatPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    controller: _scrollController,
                     itemCount: messagesList.length,
                     itemBuilder: (context, index) {
                       return ChatBubble(message: messagesList[index]);
@@ -49,13 +52,19 @@ class ChatPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: TextField(
-                    controller: controller,
+                    controller: _textController,
                     onSubmitted: (data) {
                       messages.add({
                         kMessage: data,
                         kCreatedAt: DateTime.now(),
                       });
-                      controller.clear();
+                      _textController.clear();
+
+                      _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: Duration(seconds: 5),
+                        curve: Curves.bounceInOut,
+                      );
                     },
                     decoration: InputDecoration(
                       hintText: 'Send Message',
