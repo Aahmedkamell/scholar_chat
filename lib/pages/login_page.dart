@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                         setState(() {});
                         await loginUser();
 
-                        Navigator.pushNamed(context,ChatPage.id);
+                        Navigator.pushNamed(context,ChatPage.id, arguments: email);
                      } on FirebaseAuthException catch (e) {
   switch (e.code) {
     case 'user-not-found':
